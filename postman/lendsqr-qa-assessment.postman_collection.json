@@ -1,0 +1,326 @@
+{
+  "info": {
+    "_postman_id": "06b83c3d-bb71-4820-9e21-2eee9e508d62",
+    "name": "Lendsqr QA Assessment",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "55355800",
+    "_collection_link": "https://go.postman.co/collection/55355800-06b83c3d-bb71-4820-9e21-2eee9e508d62?source=collection_link"
+  },
+  "item": [
+    {
+      "name": "Nigeria Validation APIs",
+      "item": [
+        {
+          "name": "Initialize BVN Accounts Consent",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code is valid\", function () {\r",
+                  "    pm.expect(pm.response.code).to.be.oneOf([200,400,401,403,500]);\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"Response time is below 3 seconds\", function () {\r",
+                  "    pm.expect(pm.response.responseTime).to.be.below(3000);\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"Response body is valid JSON\", function () {\r",
+                  "    pm.response.json();\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"Response should not be empty object\", function () {\r",
+                  "    const response = pm.response.json();\r",
+                  "    pm.expect(Object.keys(response).length).to.be.above(0);\r",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{api_key}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"contact\": \"{{contact}}\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "https://adjutor.lendsqr.com/v2/verification/bvn/{{bvn}}/accounts",
+              "protocol": "https",
+              "host": [
+                "adjutor",
+                "lendsqr",
+                "com"
+              ],
+              "path": [
+                "v2",
+                "verification",
+                "bvn",
+                "{{bvn}}",
+                "accounts"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Initialize BVN Accounts Consent - Missing Contact",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code should be client validation error\", function () {\r",
+                  "    pm.expect(pm.response.code).to.be.oneOf([400, 422]);\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"Response body is valid JSON\", function () {\r",
+                  "    pm.response.json();\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"Response contains error status\", function () {\r",
+                  "    const response = pm.response.json();\r",
+                  "    pm.expect(response.status).to.eql(\"error\");\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"Response message mentions contact is required\", function () {\r",
+                  "    const response = pm.response.json();\r",
+                  "    pm.expect(response.message).to.include(\"contact\");\r",
+                  "    pm.expect(response.message).to.include(\"required\");\r",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{api_key}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "https://adjutor.lendsqr.com/v2/verification/bvn/{{bvn}}/accounts",
+              "protocol": "https",
+              "host": [
+                "adjutor",
+                "lendsqr",
+                "com"
+              ],
+              "path": [
+                "v2",
+                "verification",
+                "bvn",
+                "{{bvn}}",
+                "accounts"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Initialize BVN Accounts Consent - Empty Contact",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Response message mentions contact is not allowed to be empty\", function () {\r",
+                  "    const response = pm.response.json();\r",
+                  "    pm.expect(response.message).to.include(\"contact\");\r",
+                  "    pm.expect(response.message).to.include(\"not allowed to be empty\");\r",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{api_key}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"contact\": \"\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "https://adjutor.lendsqr.com/v2/verification/bvn/{{bvn}}/accounts",
+              "protocol": "https",
+              "host": [
+                "adjutor",
+                "lendsqr",
+                "com"
+              ],
+              "path": [
+                "v2",
+                "verification",
+                "bvn",
+                "{{bvn}}",
+                "accounts"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Initialize BVN Accounts Consent - Invalid Contact Format",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code should be client validation error\", function () {\r",
+                  "    pm.expect(pm.response.code).to.be.oneOf([400, 422]);\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"Response body is valid JSON\", function () {\r",
+                  "    pm.response.json();\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"Response should contain error message\", function () {\r",
+                  "    const response = pm.response.json();\r",
+                  "    pm.expect(response).to.have.property(\"status\");\r",
+                  "    pm.expect(response).to.have.property(\"message\");\r",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{api_key}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"contact\": \"abc\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "https://adjutor.lendsqr.com/v2/verification/bvn/{{bvn}}/accounts",
+              "protocol": "https",
+              "host": [
+                "adjutor",
+                "lendsqr",
+                "com"
+              ],
+              "path": [
+                "v2",
+                "verification",
+                "bvn",
+                "{{bvn}}",
+                "accounts"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    }
+  ],
+  "event": [
+    {
+      "listen": "prerequest",
+      "script": {
+        "type": "text/javascript",
+        "packages": {},
+        "requests": {},
+        "exec": [
+          ""
+        ]
+      }
+    },
+    {
+      "listen": "test",
+      "script": {
+        "type": "text/javascript",
+        "packages": {},
+        "requests": {},
+        "exec": [
+          ""
+        ]
+      }
+    }
+  ],
+  "variable": [
+    {
+      "key": "api_key",
+      "value": ""
+    },
+    {
+      "key": "bvn",
+      "value": ""
+    },
+    {
+      "key": "contact ",
+      "value": ""
+    }
+  ]
+}
